@@ -30,6 +30,9 @@ module.exports.requireAuth = (req, res, next) => {
             if (err) {
                 console.log(err)
             } else {
+                req.auth = {
+                    userId: decodedToken.id
+                };
                 console.log(decodedToken.id);
                 next();
             }
