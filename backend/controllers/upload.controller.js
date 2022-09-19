@@ -21,22 +21,23 @@ module.exports.uploadProfil = async(req, res) => {
             throw Error("max size");
     } catch (err) {
 
-        return res.status(400).json({ errors });
+        return res.status(400).json();
     }
     const fileName = req.body.name + ".jpg";
 
     await pipeline(
         req.file.stream,
         fs.createWriteStream(
+
             `${__dirname}/../images/${fileName}`
         )
     );
     try {
         await UserModel.findByIdAndUpdate(
-            req.auth.userId, { $set: { picture: "./uploads/profil/" + fileName } }, { new: true, upsert: true, setDefaultsOnInsert: true },
+            req.auth.userId, { $set: { picture: "../images" + fileName } }, { new: true, upsert: true, setDefaultsOnInsert: true },
 
         );
-        return res.status(201).send()
+        res.status(201).send()
 
     } catch (err) {
         return res.status(500).json({ message: err });
